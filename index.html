@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoyLogan - Tienda Oficial de Auto Apuntados VIP</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --bg-dark: #090b10;
+      --bg-card: rgba(15, 19, 29, 0.85);
+      --bg-card-hover: rgba(22, 28, 43, 0.95);
+      --border-color: rgba(255, 255, 255, 0.1);
+      --primary: #6366f1;
+      --primary-light: #818cf8;
+      --accent-red: #ef4444;
+      --accent-cyan: #06b6d4;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --glow-purple: rgba(99, 102, 241, 0.35);
+      --glow-red: rgba(239, 68, 68, 0.35);
+      --header-bg: rgba(15, 19, 29, 0.95);
+      --modal-bg: #0f131d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* PRELOADER */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: var(--bg-dark);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    #preloader.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-icon {
+      color: var(--primary-light);
+      animation: spinCrosshair 1s linear infinite;
+    }
+
+    @keyframes spinCrosshair {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.1); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    .loader-bar-container {
+      width: 180px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .loader-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent-red));
+      border-radius: 4px;
+      animation: loadProgress 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes loadProgress {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    /* BANNER DE URGENCIA */
+    .urgency-banner {
+      background: linear-gradient(90deg, #b91c1c 0%, #ef4444 50%, #b91c1c 100%);
+      color: #fff;
+      text-align: center;
+      padding: 9px 16px;
+      font-size: 13.5px;
+      font-weight: 700;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.3px;
+      box-shadow: 0 2px 15px rgba(239, 68, 68, 0.5);
+      position: relative;
+      z-index: 60;
+    }
+
+    .timer-box {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-family: 'Space Grotesk', monospace;
+      font-weight: 800;
+      color: #fef08a;
+      box-shadow: 0 0 10px rgba(254, 240, 138, 0.3);
+    }
+
+    /* Fondo Táctico Free Fire */
+    .ff-bg-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      background: 
+        radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.18) 0%, transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(239, 68, 68, 0.12) 0%, transparent 50%),
+        linear-gradient(to bottom, rgba(9, 11, 16, 0.7), var(--bg-dark));
+    }
+
+    .ff-grid-lines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* HEADER DE ANCHO COMPLETO */
+    header {
+      width: 100%;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(99, 102, 241, 0.25);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--header-bg);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .brand-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--text-main) 0%, var(--primary-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-logo i {
+      color: var(--primary);
+      -webkit-text-fill-color: initial;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .currency-trigger-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .currency-trigger-btn:hover {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--primary);
+    }
+
+    .flag-icon {
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .btn-contact-header {
+      background: #25d366;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 13.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.35);
+      transition: all 0.3s ease;
+    }
+
+    .btn-contact-header:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 40px 0 30px;
+    }
+
+    .badge-vip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: var(--accent-red);
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+      animation: pulseGlow 2s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+      50% { box-shadow: 0 0 25px rgba(239, 68, 68, 0.4); }
+    }
+
+    .hero-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: -1px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, var(--accent-red) 0%, #f97316 50%, var(--primary-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .device-prompt-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--primary-light);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-shadow: 0 0 10px rgba(129, 140, 248, 0.3);
+    }
+
+    .device-prompt-title i {
+      animation: deviceIconBounce 2s infinite ease-in-out;
+    }
+
+    @keyframes deviceIconBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .device-selector-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .device-toggle {
+      background: var(--bg-card);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 6px;
+      border-radius: 20px;
+      display: flex;
+      gap: 8px;
+      position: relative;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(99, 102, 241, 0.15);
+      backdrop-filter: blur(12px);
+    }
+
+    .device-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 14px 32px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      z-index: 2;
+    }
+
+    .device-btn i {
+      transition: transform 0.3s ease;
+    }
+
+    .device-btn:hover i {
+      transform: scale(1.2) rotate(-5deg);
+    }
+
+    .device-btn.active {
+      background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
+      color: #fff;
+      box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+      animation: activeDevicePulse 2s infinite ease-in-out;
+    }
+
+    @keyframes activeDevicePulse {
+      0%, 100% { box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4); }
+      50% { box-shadow: 0 6px 30px rgba(99, 102, 241, 0.8); }
+    }
+
+    /* Reproductor VSL Video */
+    .vsl-container {
+      max-width: 400px;
+      margin: 0 auto 60px;
+      background: var(--bg-card);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 24px;
+      padding: 16px;
+      box-shadow: 0 0 35px var(--glow-purple);
+      backdrop-filter: blur(12px);
+      text-align: center;
+    }
+
+    .vsl-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(249, 115, 22, 0.25) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+      animation: liveDemoGlow 2s infinite ease-in-out;
+    }
+
+    .vsl-badge i {
+      color: var(--accent-red);
+      animation: flameFlicker 1.5s infinite alternate;
+    }
+
+    @keyframes liveDemoGlow {
+      0%, 100% {
+        box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+        border-color: rgba(239, 68, 68, 0.4);
+      }
+      50% {
+        box-shadow: 0 0 22px rgba(249, 115, 22, 0.6);
+        border-color: rgba(249, 115, 22, 0.8);
+      }
+    }
+
+    @keyframes flameFlicker {
+      0% { transform: scale(1) rotate(-3deg); filter: drop-shadow(0 0 4px #ef4444); }
+      100% { transform: scale(1.25) rotate(3deg); filter: drop-shadow(0 0 10px #f97316); }
+    }
+
+    .vsl-frame-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 177.77%;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+      margin-bottom: 16px;
+    }
+
+    .vsl-frame-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .btn-buy-vsl {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary) 0%, #4338ca 100%);
+      color: #fff;
+      font-weight: 800;
+      font-size: 15px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-decoration: none;
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-buy-vsl::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 50%;
+      height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transform: rotate(25deg);
+      animation: shimmerBtn 2.5s infinite;
+    }
+
+    .btn-buy-vsl:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 28px rgba(37, 211, 102, 0.6);
+    }
+
+    /* Precios */
+    .pricing-title {
+      font-family: 'Space Grotesk', sans-serif;
+      text-align: center;
+      font-size: 30px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .pricing-sub {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 45px;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      margin-bottom: 70px;
+    }
+
+    .price-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      backdrop-filter: blur(10px);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .price-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      border-color: var(--primary-light);
+      box-shadow: 0 20px 45px var(--glow-purple);
+      z-index: 5;
+    }
+
+    .price-card.popular {
+      border-color: var(--accent-red);
+      background: linear-gradient(180deg, rgba(239, 68, 68, 0.08) 0%, var(--bg-card) 100%);
+      box-shadow: 0 0 30px var(--glow-red);
+    }
+
+    .price-card.ultra-card {
+      border-color: var(--primary-light);
+      animation: ultraGlowPulse 3s infinite ease-in-out;
+    }
+
+    @keyframes ultraGlowPulse {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3), inset 0 0 15px rgba(99, 102, 241, 0.1);
+        border-color: rgba(129, 140, 248, 0.5);
+      }
+      50% {
+        box-shadow: 0 0 35px rgba(239, 68, 68, 0.5), inset 0 0 25px rgba(239, 68, 68, 0.15);
+        border-color: rgba(239, 68, 68, 0.8);
+      }
+    }
+
+    .card-badge {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: var(--accent-red);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+    }
+
+    .plan-name { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+    .plan-price-box { margin: 16px 0 12px; display: flex; align-items: baseline; gap: 6px; }
+    .plan-price { font-family: 'Space Grotesk', sans-serif; font-size: 38px; font-weight: 800; }
+    .plan-currency { color: var(--text-muted); font-size: 14px; font-weight: 600; }
+
+    /* BARRA DE ESCASEZ DINÁMICA */
+    .stock-box { margin-bottom: 20px; }
+    .stock-text { font-size: 12px; color: #fca5a5; font-weight: 700; display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .stock-bar-outer { width: 100%; height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden; }
+    .stock-bar-inner { height: 100%; background: linear-gradient(90deg, #f97316, #ef4444); border-radius: 10px; transition: width 0.6s ease; }
+
+    .plan-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 24px; min-height: 42px; }
+
+    .features-list { list-style: none; margin-bottom: 32px; flex-grow: 1; }
+    .features-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; margin-bottom: 14px; }
+    .features-list li i { color: var(--primary-light); margin-top: 2px; flex-shrink: 0; }
+
+    .btn-buy {
+      width: 100%;
+      padding: 16px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, var(--primary) 0%, #4338ca 100%);
+      color: #fff;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-buy::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 50%;
+      height: 200%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+      transform: rotate(25deg);
+      animation: shimmerBtn 2.2s infinite;
+    }
+
+    @keyframes shimmerBtn {
+      0% { left: -60%; }
+      35%, 100% { left: 140%; }
+    }
+
+    .btn-buy:hover {
+      transform: translateY(-4px) scale(1.04);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.7);
+      filter: brightness(1.15);
+    }
+
+    .btn-buy:active {
+      transform: translateY(1px) scale(0.97);
+    }
+
+    .btn-buy.ultra {
+      background: linear-gradient(135deg, var(--accent-red) 0%, #b91c1c 100%);
+      box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+      animation: pulseBtnUltra 1.8s infinite;
+    }
+
+    @keyframes pulseBtnUltra {
+      0%, 100% { 
+        box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); 
+        transform: scale(1);
+      }
+      50% { 
+        box-shadow: 0 0 30px rgba(239, 68, 68, 0.9); 
+        transform: scale(1.02);
+      }
+    }
+
+    .btn-buy.ultra:hover {
+      box-shadow: 0 10px 35px rgba(239, 68, 68, 0.9);
+    }
+
+    /* SECCIÓN DE IMPACTO: +3,000 CLIENTES EN TODO EL MUNDO (ANIMADO) */
+    .counter-impact-section {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(15, 19, 29, 0.95) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 28px;
+      padding: 40px 24px;
+      margin: 20px 0 60px;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(99, 102, 241, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .counter-impact-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .counter-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .counter-number-box {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      background: linear-gradient(135deg, #ffffff 0%, var(--primary-light) 60%, var(--accent-red) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+      line-height: 1;
+    }
+
+    .counter-label {
+      font-size: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .counter-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    .counter-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .metric-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--primary-light);
+    }
+
+    .metric-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    /* Referencias VIP con Fotos Reales y Carrusel Aleatorio */
+    .vip-references-section {
+      padding: 20px 0 60px;
+      border-top: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    .marquee-wrapper {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      margin-top: 30px;
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 20px;
+      width: max-content;
+      animation: marqueeRightToLeft 40s linear infinite;
+    }
+
+    .marquee-wrapper:hover .marquee-track {
+      animation-play-state: paused;
+    }
+
+    @keyframes marqueeRightToLeft {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .ref-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 24px;
+      width: 320px;
+      flex-shrink: 0;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .ref-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .ref-avatar-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary-light);
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .ref-info h4 { font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 6px; }
+    .ref-info p { font-size: 12px; color: var(--text-muted); }
+    .ref-badge-verified { color: #3b82f6; width: 16px; height: 16px; }
+
+    .stars { color: #f59e0b; margin-bottom: 10px; font-size: 13px; letter-spacing: 1px; }
+
+    .ref-comment {
+      font-size: 13.5px;
+      color: var(--text-main);
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    /* BOTÓN AZUL CLARO DESCARGA AIMBOT METADATA */
+    .btn-download-metadata-container {
+      text-align: center;
+      margin: 40px 0 20px;
+    }
+
+    .btn-download-metadata {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+      color: #090b10;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 16px 32px;
+      border-radius: 16px;
+      text-decoration: none;
+      box-shadow: 0 6px 25px rgba(56, 189, 248, 0.4);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-download-metadata:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 10px 35px rgba(56, 189, 248, 0.7);
+      filter: brightness(1.1);
+    }
+
+    /* Modal Divisas */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-content {
+      background: var(--modal-bg);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      width: 100%;
+      max-width: 480px;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+      text-align: center;
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; }
+    .close-modal { background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 20px; }
+
+    .search-box { position: relative; margin-bottom: 20px; }
+    .search-box input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      padding: 14px 16px 14px 44px;
+      border-radius: 12px;
+      color: var(--text-main);
+      font-size: 15px;
+      outline: none;
+    }
+    .search-box i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+    .country-list {
+      max-height: 280px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: left;
+    }
+
+    .country-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .country-item:hover {
+      background: rgba(99, 102, 241, 0.1);
+      border-color: var(--primary);
+    }
+
+    .country-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    footer span { color: var(--text-main); font-weight: 700; }
+
+    @media (max-width: 768px) {
+      header { padding: 14px 16px; }
+      .hero-title { font-size: 28px; }
+      .counter-number-box { font-size: 42px; }
+      .pricing-grid { grid-template-columns: 1fr; }
+      .header-actions { gap: 8px; }
+      .btn-contact-header span { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <i data-lucide="crosshair" class="loader-icon" style="width: 48px; height: 48px;"></i>
+    <div class="loader-bar-container">
+      <div class="loader-bar"></div>
+    </div>
+  </div>
+
+  <!-- BANNER REGRESIVO DE URGENCIA -->
+  <div class="urgency-banner">
+    <i data-lucide="flame" style="width: 18px; height: 18px;"></i>
+    <span>¡DESCUENTO VIP VÁLIDO POR TIEMPO LIMITADO!</span>
+    <span class="timer-box" id="countdownTimer">14:59</span>
+  </div>
+
+  <div class="ff-bg-overlay"></div>
+  <div class="ff-grid-lines"></div>
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Header Completo -->
+  <header>
+    <div class="brand-logo">
+      <i data-lucide="crosshair"></i> SoyLogan
+    </div>
+    
+    <div class="header-actions">
+      <button class="currency-trigger-btn" onclick="playClickSound(); openCurrencyModal();">
+        <span id="currentFlag" class="flag-icon">🇺🇸</span>
+        <span id="currentCurrencyLabel">USD ($)</span>
+        <i data-lucide="chevron-down" style="width: 14px;"></i>
+      </button>
+
+      <a href="https://wa.me/573023518590?text=%C2%A1Hola%20SoyLogan!%20%F0%9F%91%8B%20Quiero%20hacer%20una%20consulta." target="_blank" class="btn-contact-header" onclick="playBuySound();">
+        <i data-lucide="message-circle" style="width: 18px; height: 18px;"></i>
+        <span>Soporte</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="hero">
+      <div class="badge-vip">
+        <i data-lucide="shield-check" style="width: 16px;"></i> 100% Antiban · Sistema de Asistencia VIP
+      </div>
+      
+      <h1 class="hero-title">
+        TIENDA DE AUTO APUNTADOS VIP<br><span>SOY LOGAN</span>
+      </h1>
+
+      <div class="device-prompt-title">
+        <i data-lucide="smartphone"></i> ¿Qué dispositivo utilizas?
+      </div>
+
+      <div class="device-selector-container">
+        <div class="device-toggle">
+          <button class="device-btn active" id="btnAndroid" onclick="selectDevice('Android')">
+            <i data-lucide="smartphone"></i> Android
+          </button>
+          <button class="device-btn" id="btniOS" onclick="selectDevice('iPhone / iOS')">
+            <i data-lucide="apple"></i> iPhone / iOS
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Demostración VSL -->
+    <div class="vsl-container">
+      <div class="vsl-badge">
+        <i data-lucide="flame" style="width: 16px; height: 16px;"></i> DEMOSTRACIÓN EN VIVO DEL VSL
+      </div>
+      <div class="vsl-frame-wrapper">
+        <iframe src="https://www.youtube.com/embed/lr2gBPe6mys" title="SoyLogan Auto Apuntado VSL" allowfullscreen></iframe>
+      </div>
+
+      <a href="#planesSection" class="btn-buy-vsl" onclick="playClickSound();">
+        <i data-lucide="arrow-down-circle"></i> Ver licencias disponibles
+      </a>
+    </div>
+
+    <!-- Planes y Precios -->
+    <section id="planesSection">
+      <h2 class="pricing-title">ELIGE TU ARSENAL DE COMBATE</h2>
+      <p class="pricing-sub">Soporte inmediato y configuración paso a paso tras tu compra</p>
+
+      <div class="pricing-grid">
+        
+        <!-- Básico -->
+        <div class="price-card">
+          <div class="plan-name">Básico</div>
+          <p class="plan-desc">Entrada al nivel Pro. Fijación de mira inicial y reducción drástica de dispersión.</p>
+          <div class="plan-price-box">
+            <span class="plan-price" data-usd="13">$13</span>
+            <span class="plan-currency">USD</span>
+          </div>
+
+          <div class="stock-box">
+            <div class="stock-text">
+              <span>Cupos disponibles:</span>
+              <span id="stockBasico">-- licencias</span>
+            </div>
+            <div class="stock-bar-outer"><div class="stock-bar-inner" id="barBasico" style="width: 50%;"></div></div>
+          </div>
+
+          <ul class="features-list">
+            <li><i data-lucide="check-circle-2"></i> Fijación de mira al pecho a cabeza</li>
+            <li><i data-lucide="check-circle-2"></i> -70% de dispersión de balas</li>
+            <li><i data-lucide="check-circle-2"></i> Instalación súper rápida</li>
+            <li><i data-lucide="check-circle-2"></i> Antiban Básico Integrado</li>
+          </ul>
+          <a href="#" class="btn-buy" onclick="buyPlan('Básico', 13)">
+            <i data-lucide="shopping-cart"></i> Obtener Básico
+          </a>
+        </div>
+
+        <!-- Extremo -->
+        <div class="price-card">
+          <div class="plan-name">Extremo</div>
+          <p class="plan-desc">Atracción automática rápida (Fast Aimlock) y seguimiento a enemigos en movimiento.</p>
+          <div class="plan-price-box">
+            <span class="plan-price" data-usd="18">$18</span>
+            <span class="plan-currency">USD</span>
+          </div>
+
+          <div class="stock-box">
+            <div class="stock-text">
+              <span>Cupos disponibles:</span>
+              <span id="stockExtremo">-- licencias</span>
+            </div>
+            <div class="stock-bar-outer"><div class="stock-bar-inner" id="barExtremo" style="width: 40%;"></div></div>
+          </div>
+
+          <ul class="features-list">
+            <li><i data-lucide="check-circle-2"></i> Algoritmo Fast Aimlock</li>
+            <li><i data-lucide="check-circle-2"></i> Seguimiento continuo en movimiento</li>
+            <li><i data-lucide="check-circle-2"></i> Optimización de respuesta táctil</li>
+            <li><i data-lucide="check-circle-2"></i> Bypass de seguridad seguro</li>
+          </ul>
+          <a href="#" class="btn-buy" onclick="buyPlan('Extremo', 18)">
+            <i data-lucide="shopping-cart"></i> Obtener Extremo
+          </a>
+        </div>
+
+        <!-- Premium -->
+        <div class="price-card popular">
+          <div class="card-badge">Más Popular</div>
+          <div class="plan-name">Premium</div>
+          <p class="plan-desc">Grado Competitivo para torneos y salas. Cero delay en escopetas y francos.</p>
+          <div class="plan-price-box">
+            <span class="plan-price" data-usd="27">$27</span>
+            <span class="plan-currency">USD</span>
+          </div>
+
+          <div class="stock-box">
+            <div class="stock-text">
+              <span>Cupos disponibles:</span>
+              <span id="stockPremium">-- licencias</span>
+            </div>
+            <div class="stock-bar-outer"><div class="stock-bar-inner" id="barPremium" style="width: 25%;"></div></div>
+          </div>
+
+          <ul class="features-list">
+            <li><i data-lucide="check-circle-2"></i> Aimlock Fluido (Cero Temblor)</li>
+            <li><i data-lucide="check-circle-2"></i> Respuesta instantánea (Delay Zero)</li>
+            <li><i data-lucide="check-circle-2"></i> Compatible con todas las armas</li>
+            <li><i data-lucide="check-circle-2"></i> Sensi Macro VIP personalizada</li>
+          </ul>
+          <a href="#" class="btn-buy" onclick="buyPlan('Premium', 27)">
+            <i data-lucide="shopping-cart"></i> Obtener Premium
+          </a>
+        </div>
+
+        <!-- ULTRA -->
+        <div class="price-card popular ultra-card">
+          <div class="card-badge" style="background: var(--primary);">Máxima Potencia</div>
+          <div class="plan-name">ULTRA</div>
+          <p class="plan-desc">Dominio Total Imparable. Tasa de rojos del 100% constante en cualquier rango.</p>
+          <div class="plan-price-box">
+            <span class="plan-price" data-usd="35">$35</span>
+            <span class="plan-currency">USD</span>
+          </div>
+
+          <div class="stock-box">
+            <div class="stock-text">
+              <span style="color: #ef4444;">🔥 Últimas Licencias Hoy:</span>
+              <span style="color: #ef4444;" id="stockUltra">-- cupos</span>
+            </div>
+            <div class="stock-bar-outer"><div class="stock-bar-inner" id="barUltra" style="width: 15%; background: #ef4444;"></div></div>
+          </div>
+
+          <ul class="features-list">
+            <li><i data-lucide="check-circle-2"></i> Asistencia Inteligente 100% Rojos</li>
+            <li><i data-lucide="check-circle-2"></i> Ajuste dinámico corta y larga distancia</li>
+            <li><i data-lucide="check-circle-2"></i> Soporte VIP Instalación 24/7</li>
+            <li><i data-lucide="check-circle-2"></i> Actualizaciones de por vida gratis</li>
+          </ul>
+          <a href="#" class="btn-buy ultra" onclick="buyPlan('ULTRA', 35)">
+            <i data-lucide="zap"></i> Obtener ULTRA
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECCIÓN DE IMPACTO: +3,000 CLIENTES EN TODO EL MUNDO (ANIMADO) -->
+    <section class="counter-impact-section" id="counterSection">
+      <div class="counter-wrapper">
+        <div class="counter-number-box">
+          <span id="clientCounter">0</span>
+        </div>
+        <div class="counter-label">
+          <i data-lucide="globe" style="width: 20px; height: 20px; color: var(--primary-light);"></i>
+          Clientes en todo el mundo
+        </div>
+        <p class="counter-sub">Jugadores en Latinoamérica y Europa dominando partidas a diario con nuestro sistema VIP.</p>
+      </div>
+
+      <div class="counter-metrics-grid">
+        <div class="metric-item">
+          <span class="metric-val">99.8%</span>
+          <span class="metric-desc">Satisfacción Garantizada</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-val">24/7</span>
+          <span class="metric-desc">Soporte e Instalación</span>
+        </div>
+        <div class="metric-item">
+          <span class="metric-val">+35 Países</span>
+          <span class="metric-desc">Comunidad Activa</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Referencias VIP -->
+    <section class="vip-references-section">
+      <h2 class="pricing-title" style="font-size: 26px;">REFERENCIAS DE CLIENTES VIP</h2>
+      <p class="pricing-sub">Jugadores verificados que ya están pegando puros rojos</p>
+
+      <div class="marquee-wrapper">
+        <div class="marquee-track" id="refMarqueeTrack"></div>
+      </div>
+    </section>
+
+    <!-- BOTÓN DESCARGA AIMBOT METADATA (ABRE SMARTLINK EN NUEVA PESTAÑA Y DESCARGA SIN CERRAR LA WEB) -->
+    <div class="btn-download-metadata-container">
+      <button class="btn-download-metadata" onclick="playClickSound(); triggerSmartlinkDownload();">
+        <i data-lucide="download"></i> descarga el aimbot metadata
+      </button>
+    </div>
+
+    <footer>
+      <p>© 2026 <span>SoyLogan</span>. Todos los derechos reservados.</p>
+    </footer>
+  </div>
+
+  <!-- Modal Divisas -->
+  <div class="modal-overlay" id="currencyModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalHeaderTitle">Selecciona tu País / Moneda</h3>
+        <button class="close-modal" id="btnCloseModal" onclick="playClickSound(); closeCurrencyModal();"><i data-lucide="x"></i></button>
+      </div>
+      <div class="search-box">
+        <i data-lucide="search"></i>
+        <input type="text" id="countrySearch" placeholder="Buscar país o moneda..." oninput="filterCountries()">
+      </div>
+      <div class="country-list" id="countryList"></div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // SINTETIZADOR AUDIO WEB API (EFECTOS SÚPER SUTILES Y AGRADABLES)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playHoverSound() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(180, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.004, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.03);
+      
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.03);
+    }
+
+    function playToggleSound() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(240, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(320, audioCtx.currentTime + 0.03);
+      gain.gain.setValueAtTime(0.008, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.03);
+      
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.03);
+    }
+
+    function playClickSound() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(280, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.008, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.04);
+      
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.04);
+    }
+
+    function playBuySound() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(450, audioCtx.currentTime + 0.06);
+      gain.gain.setValueAtTime(0.01, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.06);
+      
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.06);
+    }
+
+    // FUNCIÓN INTELIGENTE: Abre el Smartlink en nueva pestaña y dispara la descarga sin cerrar la web principal
+    function triggerSmartlinkDownload() {
+      const smartlinkURL = 'https://ardance.org/4/bd44b4f51226356aab1dca5090a75173';
+      const downloadFileURL = 'https://www.mediafire.com/file/gaa0k2b24svra9k/AIMBOT+METADATA+%F0%9F%8E%AF.zip/file';
+
+      // 1. Abre la publicidad en una pestaña nueva (tu tienda principal queda intacta abierta)
+      window.open(smartlinkURL, '_blank');
+
+      // 2. Abre el archivo de MediaFire en un iframe oculto o pestaña temporal para iniciar la descarga automáticamente
+      const hiddenIframe = document.createElement('iframe');
+      hiddenIframe.style.display = 'none';
+      hiddenIframe.src = downloadFileURL;
+      document.body.appendChild(hiddenIframe);
+
+      // Limpia el elemento oculto después de unos segundos
+      setTimeout(() => {
+        document.body.removeChild(hiddenIframe);
+      }, 5000);
+    }
+
+    // OCULTAR PRELOADER DIRECTAMENTE
+    function hidePreloader() {
+      const loader = document.getElementById('preloader');
+      if (loader && !loader.classList.contains('fade-out')) {
+        loader.classList.add('fade-out');
+      }
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(hidePreloader, 600);
+
+      document.querySelectorAll('.btn-buy, .device-btn, .currency-trigger-btn, .btn-contact-header, .btn-buy-vsl, .btn-download-metadata').forEach(el => {
+        el.addEventListener('mouseenter', playHoverSound);
+      });
+    });
+
+    setTimeout(hidePreloader, 1500);
+
+    // GENERADOR DE LICENCIAS ALEATORIAS EN CADA VISITA
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randomizeStock() {
+      const basicoStock = getRandomInt(3, 6);
+      const extremoStock = getRandomInt(2, 4);
+      const premiumStock = getRandomInt(2, 3);
+      const ultraStock = getRandomInt(1, 2);
+
+      document.getElementById('stockBasico').innerText = `${basicoStock} licencias`;
+      document.getElementById('barBasico').style.width = `${basicoStock * 12}%`;
+
+      document.getElementById('stockExtremo').innerText = `${extremoStock} licencias`;
+      document.getElementById('barExtremo').style.width = `${extremoStock * 15}%`;
+
+      document.getElementById('stockPremium').innerText = `${premiumStock} licencias`;
+      document.getElementById('barPremium').style.width = `${premiumStock * 18}%`;
+
+      document.getElementById('stockUltra').innerText = `${ultraStock} ${ultraStock === 1 ? 'cupo' : 'cupos'}`;
+      document.getElementById('barUltra').style.width = `${ultraStock * 10}%`;
+    }
+
+    randomizeStock();
+
+    // ANIMACIÓN CONTADOR DE CLIENTES (+3,000) AL HACER SCROLL
+    let counterAnimated = false;
+
+    function animateClientCounter() {
+      const counterElement = document.getElementById('clientCounter');
+      const targetNumber = 3000;
+      const duration = 2200;
+      const frameRate = 1000 / 60;
+      const totalFrames = Math.round(duration / frameRate);
+      let frame = 0;
+
+      const counterInterval = setInterval(() => {
+        frame++;
+        const progress = frame / totalFrames;
+        const currentVal = Math.round(targetNumber * (1 - Math.pow(1 - progress, 3)));
+
+        counterElement.innerText = `+${currentVal.toLocaleString()}`;
+
+        if (frame === totalFrames) {
+          clearInterval(counterInterval);
+          counterElement.innerText = `+${targetNumber.toLocaleString()}`;
+        }
+      }, frameRate);
+    }
+
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !counterAnimated) {
+          counterAnimated = true;
+          animateClientCounter();
+        }
+      });
+    }, { threshold: 0.4 });
+
+    const counterSection = document.getElementById('counterSection');
+    if (counterSection) {
+      counterObserver.observe(counterSection);
+    }
+
+    // CONTADOR REGRESIVO (15 Minutos)
+    let timeInSeconds = 15 * 60;
+    const timerElement = document.getElementById('countdownTimer');
+
+    setInterval(() => {
+      if (timeInSeconds > 0) {
+        timeInSeconds--;
+        const minutes = Math.floor(timeInSeconds / 60);
+        const seconds = timeInSeconds % 60;
+        timerElement.innerText = `${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+      } else {
+        timeInSeconds = 15 * 60;
+      }
+    }, 1000);
+
+    let selectedDevice = 'Android';
+    let selectedCountryName = 'Estados Unidos / Global';
+    let currentCurrency = 'USD';
+    let currentRate = 1;
+    let currencySymbol = '$';
+    let currentFlag = '🇺🇸';
+
+    const whatsappNumber = '573023518590';
+
+    // LISTADO COMPLETO DE PAÍSES Y MONEDAS
+    const countries = [
+      { name: 'Afganistán', code: 'AFN', symbol: '؋', flag: '🇦🇫', rate: 71.5, countryCode: 'AF' },
+      { name: 'Albania', code: 'ALL', symbol: 'L', flag: '🇦🇱', rate: 94.2, countryCode: 'AL' },
+      { name: 'Alemania', code: 'EUR', symbol: '€', flag: '🇩🇪', rate: 0.92, countryCode: 'DE' },
+      { name: 'Andorra', code: 'EUR', symbol: '€', flag: '🇦🇩', rate: 0.92, countryCode: 'AD' },
+      { name: 'Angola', code: 'AOA', symbol: 'Kz', flag: '🇦🇴', rate: 830, countryCode: 'AO' },
+      { name: 'Antigua y Barbuda', code: 'XCD', symbol: '$', flag: '🇦🇬', rate: 2.7, countryCode: 'AG' },
+      { name: 'Arabia Saudita', code: 'SAR', symbol: 'ر.س', flag: '🇸🇦', rate: 3.75, countryCode: 'SA' },
+      { name: 'Argelia', code: 'DZD', symbol: 'د.ج', flag: '🇩🇿', rate: 134.5, countryCode: 'DZ' },
+      { name: 'Argentina', code: 'ARS', symbol: '$', flag: '🇦🇷', rate: 950, countryCode: 'AR' },
+      { name: 'Armenia', code: 'AMD', symbol: '֏', flag: '🇦🇲', rate: 388, countryCode: 'AM' },
+      { name: 'Australia', code: 'AUD', symbol: '$', flag: '🇦🇺', rate: 1.52, countryCode: 'AU' },
+      { name: 'Austria', code: 'EUR', symbol: '€', flag: '🇦🇹', rate: 0.92, countryCode: 'AT' },
+      { name: 'Azerbaiyán', code: 'AZN', symbol: '₼', flag: '🇦🇿', rate: 1.7, countryCode: 'AZ' },
+      { name: 'Bahamas', code: 'BSD', symbol: '$', flag: '🇧🇸', rate: 1, countryCode: 'BS' },
+      { name: 'Bangladés', code: 'BDT', symbol: '৳', flag: '🇧🇩', rate: 117.5, countryCode: 'BD' },
+      { name: 'Barbados', code: 'BBD', symbol: '$', flag: '🇧🇧', rate: 2, countryCode: 'BB' },
+      { name: 'Baréin', code: 'BHD', symbol: '.د.ب', flag: '🇧🇭', rate: 0.376, countryCode: 'BH' },
+      { name: 'Bélgica', code: 'EUR', symbol: '€', flag: '🇧🇪', rate: 0.92, countryCode: 'BE' },
+      { name: 'Belice', code: 'BZD', symbol: 'BZ$', flag: '🇧🇿', rate: 2, countryCode: 'BZ' },
+      { name: 'Benín', code: 'XOF', symbol: 'Fr', flag: '🇧🇯', rate: 605, countryCode: 'BJ' },
+      { name: 'Bielorrusia', code: 'BYN', symbol: 'Br', flag: '🇧🇾', rate: 3.25, countryCode: 'BY' },
+      { name: 'Birmania / Myanmar', code: 'MMK', symbol: 'Ks', flag: '🇲🇲', rate: 2100, countryCode: 'MM' },
+      { name: 'Bolivia', code: 'BOB', symbol: 'Bs', flag: '🇧🇴', rate: 6.91, countryCode: 'BO' },
+      { name: 'Bosnia y Herzegovina', code: 'BAM', symbol: 'KM', flag: '🇧🇦', rate: 1.8, countryCode: 'BA' },
+      { name: 'Botsuana', code: 'BWP', symbol: 'P', flag: '🇧🇼', rate: 13.5, countryCode: 'BW' },
+      { name: 'Brasil', code: 'BRL', symbol: 'R$', flag: '🇧🇷', rate: 4.95, countryCode: 'BR' },
+      { name: 'Brunéi', code: 'BND', symbol: '$', flag: '🇧🇳', rate: 1.35, countryCode: 'BN' },
+      { name: 'Bulgaria', code: 'BGN', symbol: 'лв', flag: '🇧🇬', rate: 1.8, countryCode: 'BG' },
+      { name: 'Burkina Faso', code: 'XOF', symbol: 'Fr', flag: '🇧🇫', rate: 605, countryCode: 'BF' },
+      { name: 'Burundi', code: 'BIF', symbol: 'Fr', flag: '🇧🇮', rate: 2850, countryCode: 'BI' },
+      { name: 'Bután', code: 'BTN', symbol: 'Nu.', flag: '🇧🇹', rate: 83.3, countryCode: 'BT' },
+      { name: 'Cabo Verde', code: 'CVE', symbol: '$', flag: '🇨🇻', rate: 101.5, countryCode: 'CV' },
+      { name: 'Camboya', code: 'KHR', symbol: '៛', flag: '🇰🇭', rate: 4050, countryCode: 'KH' },
+      { name: 'Camerún', code: 'XAF', symbol: 'Fr', flag: '🇨🇲', rate: 605, countryCode: 'CM' },
+      { name: 'Canadá', code: 'CAD', symbol: '$', flag: '🇨🇦', rate: 1.36, countryCode: 'CA' },
+      { name: 'Catar', code: 'QAR', symbol: 'ر.ق', flag: '🇶🇦', rate: 3.64, countryCode: 'QA' },
+      { name: 'Chad', code: 'XAF', symbol: 'Fr', flag: '🇹🇩', rate: 605, countryCode: 'TD' },
+      { name: 'Chile', code: 'CLP', symbol: '$', flag: '🇨🇱', rate: 940, countryCode: 'CL' },
+      { name: 'China', code: 'CNY', symbol: '¥', flag: '🇨🇳', rate: 7.23, countryCode: 'CN' },
+      { name: 'Chipre', code: 'EUR', symbol: '€', flag: '🇨🇾', rate: 0.92, countryCode: 'CY' },
+      { name: 'Colombia', code: 'COP', symbol: '$', flag: '🇨🇴', rate: 3900, countryCode: 'CO' },
+      { name: 'Comoras', code: 'KMF', symbol: 'Fr', flag: '🇰🇲', rate: 452, countryCode: 'KM' },
+      { name: 'Congo', code: 'XAF', symbol: 'Fr', flag: '🇨🇬', rate: 605, countryCode: 'CG' },
+      { name: 'Corea del Norte', code: 'KPW', symbol: '₩', flag: '🇰🇵', rate: 900, countryCode: 'KP' },
+      { name: 'Corea del Sur', code: 'KRW', symbol: '₩', flag: '🇰🇷', rate: 1360, countryCode: 'KR' },
+      { name: 'Costa de Marfil', code: 'XOF', symbol: 'Fr', flag: '🇨🇮', rate: 605, countryCode: 'CI' },
+      { name: 'Costa Rica', code: 'CRC', symbol: '₡', flag: '🇨🇷', rate: 515, countryCode: 'CR' },
+      { name: 'Croacia', code: 'EUR', symbol: '€', flag: '🇭🇷', rate: 0.92, countryCode: 'HR' },
+      { name: 'Cuba', code: 'CUP', symbol: '$', flag: '🇨🇺', rate: 24, countryCode: 'CU' },
+      { name: 'Dinamarca', code: 'DKK', symbol: 'kr', flag: '🇩🇰', rate: 6.88, countryCode: 'DK' },
+      { name: 'Dominica', code: 'XCD', symbol: '$', flag: '🇩🇲', rate: 2.7, countryCode: 'DM' },
+      { name: 'Ecuador', code: 'USD', symbol: '$', flag: '🇪🇨', rate: 1, countryCode: 'EC' },
+      { name: 'Egipto', code: 'EGP', symbol: '£', flag: '🇪🇬', rate: 47.5, countryCode: 'EG' },
+      { name: 'El Salvador', code: 'USD', symbol: '$', flag: '🇸🇻', rate: 1, countryCode: 'SV' },
+      { name: 'Emiratos Árabes Unidos', code: 'AED', symbol: 'د.إ', flag: '🇦🇪', rate: 3.67, countryCode: 'AE' },
+      { name: 'Eritrea', code: 'ERN', symbol: 'Nfk', flag: '🇪🇷', rate: 15, countryCode: 'ER' },
+      { name: 'Eslovaquia', code: 'EUR', symbol: '€', flag: '🇸🇰', rate: 0.92, countryCode: 'SK' },
+      { name: 'Eslovenia', code: 'EUR', symbol: '€', flag: '🇸🇮', rate: 0.92, countryCode: 'SI' },
+      { name: 'España / Europa', code: 'EUR', symbol: '€', flag: '🇪🇸', rate: 0.92, countryCode: 'ES' },
+      { name: 'Estados Unidos / Global', code: 'USD', symbol: '$', flag: '🇺🇸', rate: 1, countryCode: 'US' },
+      { name: 'Estonia', code: 'EUR', symbol: '€', flag: '🇪🇪', rate: 0.92, countryCode: 'EE' },
+      { name: 'Etiopía', code: 'ETB', symbol: 'Br', flag: '🇪🇹', rate: 57.2, countryCode: 'ET' },
+      { name: 'Filipinas', code: 'PHP', symbol: '₱', flag: '🇵🇭', rate: 56.2, countryCode: 'PH' },
+      { name: 'Finlandia', code: 'EUR', symbol: '€', flag: '🇫🇮', rate: 0.92, countryCode: 'FI' },
+      { name: 'Fiyi', code: 'FJD', symbol: '$', flag: '🇫🇯', rate: 2.25, countryCode: 'FJ' },
+      { name: 'Francia', code: 'EUR', symbol: '€', flag: '🇫🇷', rate: 0.92, countryCode: 'FR' },
+      { name: 'Gabón', code: 'XAF', symbol: 'Fr', flag: '🇬🇦', rate: 605, countryCode: 'GA' },
+      { name: 'Gambia', code: 'GMD', symbol: 'D', flag: '🇬🇲', rate: 68.5, countryCode: 'GM' },
+      { name: 'Georgia', code: 'GEL', symbol: '₾', flag: '🇬🇪', rate: 2.68, countryCode: 'GE' },
+      { name: 'Ghana', code: 'GHS', symbol: '₵', flag: '🇬🇭', rate: 14.8, countryCode: 'GH' },
+      { name: 'Grecia', code: 'EUR', symbol: '€', flag: '🇬🇷', rate: 0.92, countryCode: 'GR' },
+      { name: 'Guatemala', code: 'GTQ', symbol: 'Q', flag: '🇬🇹', rate: 7.8, countryCode: 'GT' },
+      { name: 'Guinea', code: 'GNF', symbol: 'Fr', flag: '🇬🇳', rate: 8600, countryCode: 'GN' },
+      { name: 'Guinea Ecuatorial', code: 'XAF', symbol: 'Fr', flag: '🇬🇶', rate: 605, countryCode: 'GQ' },
+      { name: 'Guinea-Bisáu', code: 'XOF', symbol: 'Fr', flag: '🇬🇼', rate: 605, countryCode: 'GW' },
+      { name: 'Guyana', code: 'GYD', symbol: '$', flag: '🇬🇾', rate: 209, countryCode: 'GY' },
+      { name: 'Haití', code: 'HTG', symbol: 'G', flag: '🇭🇹', rate: 132, countryCode: 'HT' },
+      { name: 'Honduras', code: 'HNL', symbol: 'L', flag: '🇭🇳', rate: 24.7, countryCode: 'HN' },
+      { name: 'Hungría', code: 'HUF', symbol: 'Ft', flag: '🇭🇺', rate: 360, countryCode: 'HU' },
+      { name: 'India', code: 'INR', symbol: '₹', flag: '🇮🇳', rate: 83.3, countryCode: 'IN' },
+      { name: 'Indonesia', code: 'IDR', symbol: 'Rp', flag: '🇮🇩', rate: 16100, countryCode: 'ID' },
+      { name: 'Irak', code: 'IQD', symbol: 'ع.د', flag: '🇮🇶', rate: 1310, countryCode: 'IQ' },
+      { name: 'Irán', code: 'IRR', symbol: '﷼', flag: '🇮🇷', rate: 42000, countryCode: 'IR' },
+      { name: 'Irlanda', code: 'EUR', symbol: '€', flag: '🇮🇪', rate: 0.92, countryCode: 'IE' },
+      { name: 'Islandia', code: 'ISK', symbol: 'kr', flag: '🇮🇸', rate: 139, countryCode: 'IS' },
+      { name: 'Islas Marshall', code: 'USD', symbol: '$', flag: '🇲🇭', rate: 1, countryCode: 'MH' },
+      { name: 'Islas Salomón', code: 'SBD', symbol: '$', flag: '🇸🇧', rate: 8.4, countryCode: 'SB' },
+      { name: 'Israel', code: 'ILS', symbol: '₪', flag: '🇮🇱', rate: 3.7, countryCode: 'IL' },
+      { name: 'Italia', code: 'EUR', symbol: '€', flag: '🇮🇹', rate: 0.92, countryCode: 'IT' },
+      { name: 'Jamaica', code: 'JMD', symbol: 'J$', flag: '🇯🇲', rate: 156, countryCode: 'JM' },
+      { name: 'Japón', code: 'JPY', symbol: '¥', flag: '🇯🇵', rate: 155, countryCode: 'JP' },
+      { name: 'Jordania', code: 'JOD', symbol: 'د.ا', flag: '🇯🇴', rate: 0.709, countryCode: 'JO' },
+      { name: 'Kazajistán', code: 'KZT', symbol: '₸', flag: '🇰🇿', rate: 448, countryCode: 'KZ' },
+      { name: 'Kenia', code: 'KES', symbol: 'Sh', flag: '🇰🇪', rate: 132, countryCode: 'KE' },
+      { name: 'Kirguistán', code: 'KGS', symbol: 'лв', flag: '🇰🇬', rate: 89.5, countryCode: 'KG' },
+      { name: 'Kiribati', code: 'AUD', symbol: '$', flag: '🇰🇮', rate: 1.52, countryCode: 'KI' },
+      { name: 'Kuwait', code: 'KWD', symbol: 'د.ك', flag: '🇰🇼', rate: 0.308, countryCode: 'KW' },
+      { name: 'Laos', code: 'LAK', symbol: '₭', flag: '🇱🇦', rate: 21500, countryCode: 'LA' },
+      { name: 'Lesoto', code: 'LSL', symbol: 'L', flag: '🇱🇸', rate: 18.5, countryCode: 'LS' },
+      { name: 'Letonia', code: 'EUR', symbol: '€', flag: '🇱🇻', rate: 0.92, countryCode: 'LV' },
+      { name: 'Líbano', code: 'LBP', symbol: 'ل.ل', flag: '🇱🇧', rate: 89500, countryCode: 'LB' },
+      { name: 'Liberia', code: 'LRD', symbol: '$', flag: '🇱🇷', rate: 194, countryCode: 'LR' },
+      { name: 'Libia', code: 'LYD', symbol: 'ل.د', flag: '🇱🇾', rate: 4.85, countryCode: 'LY' },
+      { name: 'Liechtenstein', code: 'CHF', symbol: 'CHF', flag: '🇱🇮', rate: 0.91, countryCode: 'LI' },
+      { name: 'Lituania', code: 'EUR', symbol: '€', flag: '🇱🇹', rate: 0.92, countryCode: 'LT' },
+      { name: 'Luxemburgo', code: 'EUR', symbol: '€', flag: '🇱🇺', rate: 0.92, countryCode: 'LU' },
+      { name: 'Macedonia del Norte', code: 'MKD', symbol: 'ден', flag: '🇲🇰', rate: 56.8, countryCode: 'MK' },
+      { name: 'Madagascar', code: 'MGA', symbol: 'Ar', flag: '🇲🇬', rate: 4500, countryCode: 'MG' },
+      { name: 'Malasia', code: 'MYR', symbol: 'RM', flag: '🇲🇾', rate: 4.72, countryCode: 'MY' },
+      { name: 'Malaui', code: 'MWK', symbol: 'MK', flag: '🇲🇼', rate: 1730, countryCode: 'MW' },
+      { name: 'Maldivas', code: 'MVR', symbol: '.ރ', flag: '🇲🇻', rate: 15.4, countryCode: 'MV' },
+      { name: 'Malí', code: 'XOF', symbol: 'Fr', flag: '🇲🇱', rate: 605, countryCode: 'ML' },
+      { name: 'Malta', code: 'EUR', symbol: '€', flag: '🇲🇹', rate: 0.92, countryCode: 'MT' },
+      { name: 'Marruecos', code: 'MAD', symbol: 'د.م.', flag: '🇲🇦', rate: 10.1, countryCode: 'MA' },
+      { name: 'Mauricio', code: 'MUR', symbol: '₨', flag: '🇲🇺', rate: 46.2, countryCode: 'MU' },
+      { name: 'Mauritania', code: 'MRU', symbol: 'UM', flag: '🇲🇷', rate: 39.8, countryCode: 'MR' },
+      { name: 'México', code: 'MXN', symbol: '$', flag: '🇲🇽', rate: 17.2, countryCode: 'MX' },
+      { name: 'Micronesia', code: 'USD', symbol: '$', flag: '🇫🇲', rate: 1, countryCode: 'FM' },
+      { name: 'Moldavia', code: 'MDL', symbol: 'L', flag: '🇲🇩', rate: 17.8, countryCode: 'MD' },
+      { name: 'Mónaco', code: 'EUR', symbol: '€', flag: '🇲🇨', rate: 0.92, countryCode: 'MC' },
+      { name: 'Mongolia', code: 'MNT', symbol: '₮', flag: '🇲🇳', rate: 3450, countryCode: 'MN' },
+      { name: 'Montenegro', code: 'EUR', symbol: '€', flag: '🇲🇪', rate: 0.92, countryCode: 'ME' },
+      { name: 'Mozambique', code: 'MZN', symbol: 'MT', flag: '🇲🇿', rate: 63.8, countryCode: 'MZ' },
+      { name: 'Namibia', code: 'NAD', symbol: '$', flag: '🇳🇦', rate: 18.5, countryCode: 'NA' },
+      { name: 'Nauru', code: 'AUD', symbol: '$', flag: '🇳🇷', rate: 1.52, countryCode: 'NR' },
+      { name: 'Nepal', code: 'NPR', symbol: '₨', flag: '🇳🇵', rate: 133, countryCode: 'NP' },
+      { name: 'Nicaragua', code: 'NIO', symbol: 'C$', flag: '🇳🇮', rate: 36.6, countryCode: 'NI' },
+      { name: 'Níger', code: 'XOF', symbol: 'Fr', flag: '🇳🇪', rate: 605, countryCode: 'NE' },
+      { name: 'Nigeria', code: 'NGN', symbol: '₦', flag: '🇳🇬', rate: 1450, countryCode: 'NG' },
+      { name: 'Noruega', code: 'NOK', symbol: 'kr', flag: '🇳🇴', rate: 10.8, countryCode: 'NO' },
+      { name: 'Nueva Zelanda', code: 'NZD', symbol: '$', flag: '🇳🇿', rate: 1.63, countryCode: 'NZ' },
+      { name: 'Omán', code: 'OMR', symbol: 'ر.ع.', flag: '🇴🇲', rate: 0.385, countryCode: 'OM' },
+      { name: 'Países Bajos', code: 'EUR', symbol: '€', flag: '🇳🇱', rate: 0.92, countryCode: 'NL' },
+      { name: 'Pakistán', code: 'PKR', symbol: '₨', flag: '🇵🇰', rate: 278, countryCode: 'PK' },
+      { name: 'Palaos', code: 'USD', symbol: '$', flag: '🇵🇼', rate: 1, countryCode: 'PW' },
+      { name: 'Papúa Nueva Guinea', code: 'PGK', symbol: 'K', flag: '🇵🇬', rate: 3.85, countryCode: 'PG' },
+      { name: 'Paraguay', code: 'PYG', symbol: '₲', flag: '🇵🇾', rate: 7500, countryCode: 'PY' },
+      { name: 'Perú', code: 'PEN', symbol: 'S/', flag: '🇵🇪', rate: 3.75, countryCode: 'PE' },
+      { name: 'Polonia', code: 'PLN', symbol: 'zł', flag: '🇵🇱', rate: 3.98, countryCode: 'PL' },
+      { name: 'Portugal', code: 'EUR', symbol: '€', flag: '🇵🇹', rate: 0.92, countryCode: 'PT' },
+      { name: 'Reino Unido', code: 'GBP', symbol: '£', flag: '🇬🇧', rate: 0.79, countryCode: 'GB' },
+      { name: 'República Centroafricana', code: 'XAF', symbol: 'Fr', flag: '🇨🇫', rate: 605, countryCode: 'CF' },
+      { name: 'República Checa', code: 'CZK', symbol: 'Kč', flag: '🇨🇿', rate: 23.2, countryCode: 'CZ' },
+      { name: 'República Dominicana', code: 'DOP', symbol: 'RD$', flag: '🇩🇴', rate: 59, countryCode: 'DO' },
+      { name: 'Ruanda', code: 'RWF', symbol: 'Fr', flag: '🇷🇼', rate: 1290, countryCode: 'RW' },
+      { name: 'Rumanía', code: 'RON', symbol: 'lei', flag: '🇷🇴', rate: 4.58, countryCode: 'RO' },
+      { name: 'Rusia', code: 'RUB', symbol: '₽', flag: '🇷🇺', rate: 91.5, countryCode: 'RU' },
+      { name: 'Samoa', code: 'WST', symbol: 'T', flag: '🇼🇸', rate: 2.75, countryCode: 'WS' },
+      { name: 'San Cristóbal y Nieves', code: 'XCD', symbol: '$', flag: '🇰🇳', rate: 2.7, countryCode: 'KN' },
+      { name: 'San Marino', code: 'EUR', symbol: '€', flag: '🇸🇲', rate: 0.92, countryCode: 'SM' },
+      { name: 'San Vicente y las Granadinas', code: 'XCD', symbol: '$', flag: '🇻🇨', rate: 2.7, countryCode: 'VC' },
+      { name: 'Santa Lucía', code: 'XCD', symbol: '$', flag: '🇱🇨', rate: 2.7, countryCode: 'LC' },
+      { name: 'Santo Tomé y Príncipe', code: 'STN', symbol: 'Db', flag: '🇸🇹', rate: 22.5, countryCode: 'ST' },
+      { name: 'Senegal', code: 'XOF', symbol: 'Fr', flag: '🇸🇳', rate: 605, countryCode: 'SN' },
+      { name: 'Serbia', code: 'RSD', symbol: 'дин', flag: '🇷🇸', rate: 107.5, countryCode: 'RS' },
+      { name: 'Seychelles', code: 'SCR', symbol: '₨', flag: '🇸🇨', rate: 13.5, countryCode: 'SC' },
+      { name: 'Sierra Leona', code: 'SLL', symbol: 'Le', flag: '🇸🇱', rate: 20900, countryCode: 'SL' },
+      { name: 'Singapur', code: 'SGD', symbol: '$', flag: '🇸🇬', rate: 1.35, countryCode: 'SG' },
+      { name: 'Siria', code: 'SYP', symbol: '£', flag: '🇸🇾', rate: 13000, countryCode: 'SY' },
+      { name: 'Somalia', code: 'SOS', symbol: 'Sh', flag: '🇸🇴', rate: 571, countryCode: 'SO' },
+      { name: 'Sri Lanka', code: 'LKR', symbol: 'Rs', flag: '🇱🇰', rate: 302, countryCode: 'LK' },
+      { name: 'Suazilandia / Esuatini', code: 'SZL', symbol: 'L', flag: 'SZ', rate: 18.5, countryCode: 'SZ' },
+      { name: 'Sudáfrica', code: 'ZAR', symbol: 'R', flag: '🇿🇦', rate: 18.5, countryCode: 'ZA' },
+      { name: 'Sudán', code: 'SDG', symbol: 'ج.س.', flag: '🇸🇩', rate: 600, countryCode: 'SD' },
+      { name: 'Sudán del Sur', code: 'SSP', symbol: '£', flag: '🇸🇸', rate: 1300, countryCode: 'SS' },
+      { name: 'Suecia', code: 'SEK', symbol: 'kr', flag: '🇸🇪', rate: 10.6, countryCode: 'SE' },
+      { name: 'Suiza', code: 'CHF', symbol: 'CHF', flag: '🇨🇭', rate: 0.91, countryCode: 'CH' },
+      { name: 'Surinam', code: 'SRD', symbol: '$', flag: '🇸🇷', rate: 30.5, countryCode: 'SR' },
+      { name: 'Tailandia', code: 'THB', symbol: '฿', flag: '🇹🇭', rate: 36.5, countryCode: 'TH' },
+      { name: 'Tanzania', code: 'TZS', symbol: 'Sh', flag: '🇹🇿', rate: 2600, countryCode: 'TZ' },
+      { name: 'Tayikistán', code: 'TJS', symbol: 'SM', flag: '🇹🇯', rate: 10.9, countryCode: 'TJ' },
+      { name: 'Timor Oriental', code: 'USD', symbol: '$', flag: '🇹🇱', rate: 1, countryCode: 'TL' },
+      { name: 'Togo', code: 'XOF', symbol: 'Fr', flag: '🇹🇬', rate: 605, countryCode: 'TG' },
+      { name: 'Tonga', code: 'TOP', symbol: 'T$', flag: '🇹🇴', rate: 2.34, countryCode: 'TO' },
+      { name: 'Trinidad y Tobago', code: 'TTD', symbol: '$', flag: '🇹🇹', rate: 6.78, countryCode: 'TT' },
+      { name: 'Túnez', code: 'TND', symbol: 'د.ت', flag: '🇹🇳', rate: 3.12, countryCode: 'TN' },
+      { name: 'Turkmenistán', code: 'TMT', symbol: 'm', flag: '🇹🇲', rate: 3.5, countryCode: 'TM' },
+      { name: 'Turquía', code: 'TRY', symbol: '₺', flag: '🇹🇷', rate: 32.2, countryCode: 'TR' },
+      { name: 'Tuvalu', code: 'AUD', symbol: '$', flag: '🇹🇻', rate: 1.52, countryCode: 'TV' },
+      { name: 'Ucrania', code: 'UAH', symbol: '₴', flag: '🇺🇦', rate: 40.5, countryCode: 'UA' },
+      { name: 'Uganda', code: 'UGX', symbol: 'Sh', flag: '🇺🇬', rate: 3820, countryCode: 'UG' },
+      { name: 'Uruguay', code: 'UYU', symbol: '$', flag: '🇺🇾', rate: 38.5, countryCode: 'UY' },
+      { name: 'Uzbekistán', code: 'UZS', symbol: 'so\'m', flag: '🇺🇿', rate: 12600, countryCode: 'UZ' },
+      { name: 'Vanuatu', code: 'VUV', symbol: 'Vt', flag: '🇻🇺', rate: 118, countryCode: 'VU' },
+      { name: 'Venezuela', code: 'VES', symbol: 'Bs.', flag: '🇻🇪', rate: 36.5, countryCode: 'VE' },
+      { name: 'Vietnam', code: 'VND', symbol: '₫', flag: '🇻🇳', rate: 25400, countryCode: 'VN' },
+      { name: 'Yemen', code: 'YER', symbol: '﷼', flag: '🇾🇪', rate: 250, countryCode: 'YE' },
+      { name: 'Yibuti', code: 'DJF', symbol: 'Fr', flag: '🇩🇯', rate: 177.7, countryCode: 'DJ' },
+      { name: 'Zambia', code: 'ZMW', symbol: 'ZK', flag: '🇿🇲', rate: 26.5, countryCode: 'ZM' },
+      { name: 'Zimbabue', code: 'ZWL', symbol: '$', flag: '🇿🇼', rate: 13.8, countryCode: 'ZW' }
+    ];
+
+    // DETECCIÓN AUTOMÁTICA POR IP AL CARGAR LA PÁGINA
+    async function autoDetectUserCountryAndRates() {
+      try {
+        const resRates = await fetch('https://open.er-api.com/v6/latest/USD');
+        const ratesData = await resRates.json();
+
+        if (ratesData && ratesData.rates) {
+          countries.forEach(c => {
+            if (ratesData.rates[c.code]) {
+              c.rate = ratesData.rates[c.code];
+            }
+          });
+        }
+
+        const resGeo = await fetch('https://ipapi.co/json/');
+        const geoData = await resGeo.json();
+
+        if (geoData && geoData.country_code) {
+          const matchedCountry = countries.find(c => c.countryCode === geoData.country_code);
+          
+          if (matchedCountry) {
+            setCurrency(matchedCountry.name, matchedCountry.code, matchedCountry.symbol, matchedCountry.flag, matchedCountry.rate);
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('Usando moneda por defecto (USD) por fallo de red:', err);
+      }
+    }
+
+    autoDetectUserCountryAndRates();
+
+    // 18 REFERENCIAS VIP CON FOTOS REALES
+    const vipReferences = [
+      { 
+        name: 'Mateo R.', 
+        device: 'iPhone 13 Pro', 
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
+        text: 'Compré el Auto Apuntado ULTRA y es una locura en clasificatoria. La mira se queda fija en la cabeza.' 
+      },
+      { 
+        name: 'Santi_FF', 
+        device: 'Xiaomi Poco X3 Pro', 
+        avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=150&q=80',
+        text: 'Súper recomendado Logan. La instalación guiada me tomó menos de 5 minutos y no he tenido ningún ban.' 
+      },
+      { 
+        name: 'Kevin_Pro', 
+        device: 'Samsung S21 Ultra', 
+        avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=150&q=80',
+        text: 'En las salas de torneos con escopetas no fallo un solo tiro. Cero delay de respuesta, 100% recomendado.' 
+      },
+      { 
+        name: 'Dilan_VIP', 
+        device: 'iPhone 11', 
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80',
+        text: 'El plan Premium cumplió todas mis expectativas. Puros rojos en 4v4 y en mapa completo.' 
+      },
+      { 
+        name: 'Carlos_G', 
+        device: 'Motorola G60', 
+        avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80',
+        text: 'La mejor compra que he hecho. Pasé de rango Heroico a Gran Maestro en pocos días con el ULTRA.' 
+      },
+      { 
+        name: 'Javier_FF', 
+        device: 'Redmi Note 10', 
+        avatar: 'https://images.unsplash.com/photo-1628157582853-a796fa650a6a?auto=format&fit=crop&w=150&q=80',
+        text: 'La atención por WhatsApp es súper rápida y el soporte 24/7 te ayuda en todo momento.' 
+      },
+      { 
+        name: 'Lucas_Gamer', 
+        device: 'iPhone 14 Pro Max', 
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+        text: 'Increíble cómo mejoró mi precisión con la MP40. Logan me configuró la sensibilidad por WhatsApp.' 
+      },
+      { 
+        name: 'Thiago_FF', 
+        device: 'Realme GT Neo 3', 
+        avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=150&q=80',
+        text: 'El archivo antiban funciona impecable. Llevo un mes usándolo en mi cuenta principal sin problema.' 
+      },
+      { 
+        name: 'Andrés_VIP', 
+        device: 'Poco F4 GT', 
+        avatar: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?auto=format&fit=crop&w=150&q=80',
+        text: '10/10 el Plan Extremo. El levantamiento de mira es súper fluido y natural en cualquier rango.' 
+      },
+      { 
+        name: 'Esteban_K', 
+        device: 'Samsung A54 5G', 
+        avatar: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=150&q=80',
+        text: 'Compré desde México en mi moneda local sin problemas. Entrega inmediata por WhatsApp.' 
+      },
+      { 
+        name: 'Gonzalo_P', 
+        device: 'Xiaomi Mi 11T Pro', 
+        avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=150&q=80',
+        text: 'En apuestas de salas 4v4 gano casi siempre. La inversión se paga sola el primer día.' 
+      },
+      { 
+        name: 'Nico_Aim', 
+        device: 'ZTE Nubia RedMagic', 
+        avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80',
+        text: 'El soporte de Logan es lo mejor, me ayudó a instalar todo paso a paso por llamada.' 
+      },
+      { 
+        name: 'Rodrigo_Mx', 
+        device: 'Motorola Edge 40', 
+        avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=150&q=80',
+        text: 'Tenía dudas pero Logan respondió al instante en WhatsApp. El panel funciona de maravilla.' 
+      },
+      { 
+        name: 'Samuel_ES', 
+        device: 'iPhone 12 Mini', 
+        avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&q=80',
+        text: 'Pagué en euros desde España y el proceso fue súper fluido. Excelente calidad y atención.' 
+      },
+      { 
+        name: 'Felipe_Col', 
+        device: 'Xiaomi Redmi Note 12', 
+        avatar: 'https://images.unsplash.com/photo-1492446845049-9c50cc313f00?auto=format&fit=crop&w=150&q=80',
+        text: 'Con el plan ULTRA es imposible perder un enfrentamiento 1vs1. Pegas puro rojo.' 
+      },
+      { 
+        name: 'Matias_Ar', 
+        device: 'Samsung S20 FE', 
+        avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80',
+        text: 'Recomiendo activar la Sensi Macro VIP que viene con el plan Premium. Cambia todo el juego.' 
+      },
+      { 
+        name: 'Gabriel_Pe', 
+        device: 'Infinix Note 30', 
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+        text: 'Excelente servicio desde Perú. La instalación fue en menos de 3 minutos guiado por vídeo.' 
+      },
+      { 
+        name: 'Ignacio_Cl', 
+        device: 'POCO X5 Pro 5G', 
+        avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=150&q=80',
+        text: 'Todo perfecto. El antiban es totalmente seguro y los tiros a la cabeza son súper limpios.' 
+      }
+    ];
+
+    function shuffleArray(array) {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    function renderVipReferences() {
+      const track = document.getElementById('refMarqueeTrack');
+      const randomizedRefs = shuffleArray(vipReferences);
+      const fullList = [...randomizedRefs, ...randomizedRefs];
+      
+      track.innerHTML = fullList.map(ref => `
+        <div class="ref-card">
+          <div class="ref-header">
+            <img src="${ref.avatar}" alt="${ref.name}" class="ref-avatar-img" />
+            <div class="ref-info">
+              <h4>${ref.name} <i data-lucide="check-circle" class="ref-badge-verified"></i></h4>
+              <p>Cliente VIP · ${ref.device}</p>
+            </div>
+          </div>
+          <div class="stars">★★★★★</div>
+          <p class="ref-comment">"${ref.text}"</p>
+        </div>
+      `).join('');
+      
+      lucide.createIcons();
+    }
+
+    function selectDevice(device) {
+      playToggleSound();
+      selectedDevice = device;
+      document.getElementById('btnAndroid').classList.toggle('active', device === 'Android');
+      document.getElementById('btniOS').classList.toggle('active', device === 'iPhone / iOS');
+    }
+
+    function openCurrencyModal() {
+      playClickSound();
+      document.getElementById('currencyModal').classList.add('active');
+      renderCountryList(countries);
+    }
+
+    function closeCurrencyModal() {
+      document.getElementById('currencyModal').classList.remove('active');
+    }
+
+    function renderCountryList(list) {
+      const container = document.getElementById('countryList');
+      container.innerHTML = list.map(c => `
+        <div class="country-item" onclick="playClickSound(); setCurrency('${c.name}', '${c.code}', '${c.symbol}', '${c.flag}', ${c.rate})">
+          <div class="country-info">
+            <span class="flag-icon">${c.flag}</span>
+            <span><strong>${c.name}</strong> (${c.code})</span>
+          </div>
+          <span>${c.symbol}</span>
+        </div>
+      `).join('');
+    }
+
+    function filterCountries() {
+      const query = document.getElementById('countrySearch').value.toLowerCase();
+      const filtered = countries.filter(c => c.name.toLowerCase().includes(query) || c.code.toLowerCase().includes(query));
+      renderCountryList(filtered);
+    }
+
+    function setCurrency(countryName, code, symbol, flag, rate) {
+      selectedCountryName = countryName;
+      currentCurrency = code;
+      currencySymbol = symbol;
+      currentRate = rate;
+      currentFlag = flag;
+
+      document.getElementById('currentFlag').innerText = flag;
+      document.getElementById('currentCurrencyLabel').innerText = `${code} (${symbol})`;
+
+      document.querySelectorAll('.plan-price').forEach(el => {
+        const usdPrice = parseFloat(el.getAttribute('data-usd'));
+        const converted = Math.round(usdPrice * rate);
+        el.innerText = `${symbol}${converted.toLocaleString()}`;
+      });
+
+      document.querySelectorAll('.plan-currency').forEach(el => {
+        el.innerText = code;
+      });
+
+      closeCurrencyModal();
+    }
+
+    function buyPlan(planName, priceUSD) {
+      playBuySound();
+      const localPrice = Math.round(priceUSD * currentRate);
+      const priceFormatted = `${currencySymbol}${localPrice.toLocaleString()} ${currentCurrency}`;
+      
+      const message = `¡Hola SoyLogan! 👋 Quiero adquirir el *Auto Apuntado ${planName}*\n\n` +
+                      `📱 *Dispositivo:* ${selectedDevice}\n` +
+                      `💰 *Precio:* ${priceFormatted} (${priceUSD} USD)\n` +
+                      `🌍 *País:* ${selectedCountryName}\n\n` +
+                      `Quedo atento a las instrucciones de pago para la entrega inmediata. Gracias!`;
+
+      const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
+    }
+
+    // Partículas
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const particles = Array.from({ length: 35 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 2 + 1,
+      speedY: Math.random() * 0.8 + 0.2,
+      opacity: Math.random() * 0.5 + 0.2
+    }));
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.y -= p.speedY;
+        if (p.y < 0) p.y = canvas.height;
+        
+        ctx.fillStyle = `rgba(239, 68, 68, ${p.opacity})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+
+    renderVipReferences();
+    animateParticles();
+  </script>
+
+  <!-- CÓDIGO DE ADSTERRA (SOCIAL BAR) -->
+  <script data-cfasync="false" src="https://bellnewyork.org/14/1df30d2f71dbaaf272f5f593c0f21d08"></script>
+</body>
+</html>
